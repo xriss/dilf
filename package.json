@@ -1,7 +1,7 @@
 {
   "name": "@xriss/dilf",
   "description": "Data I'd Like to Format",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "main": "day.js",
   "repository": {
