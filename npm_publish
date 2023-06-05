@@ -7,5 +7,5 @@ npm version patch
 git add .
 git commit -m.
 git push
-npm publish
+npm publish --access=public
 
