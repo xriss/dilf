@@ -1,7 +1,7 @@
 {
   "name": "dilf",
   "description": "Data I'd Like to Format",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "day.js",
   "repository": {
