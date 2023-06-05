@@ -3,7 +3,7 @@
   "description": "Data I'd Like to Format",
   "version": "0.0.3",
   "license": "MIT",
-  "main": "day.js",
+  "main": "dilf.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/xriss/dilf.git",
@@ -14,11 +14,10 @@
   },
   "directories": {},
   "dependencies": {
-    "yargs": "^17.7.2"
-  },
-  "devDependencies": {
-    "json-stable-stringify": "^1.0.1",
+    "hjson": "^3.2.2",
+    "json-stable-stringify": "^1.0.2",
+    "marked": "^5.0.4",
     "sax": "^1.2.4",
-    "sax-parser": "^2.0.1"
+    "yargs": "^17.7.2"
   }
 }
