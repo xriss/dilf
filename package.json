@@ -1,0 +1,22 @@
+{
+  "name": "dilf",
+  "description": "Data I'd Like to Format",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "day.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xriss/dilf.git",
+    "directory": "live"
+  },
+  "bin": {
+    "dilf": "js/cmd.js"
+  },
+  "directories": {},
+  "dependencies": {},
+  "devDependencies": {
+    "json-stable-stringify": "^1.0.1",
+    "sax": "^1.2.4",
+    "sax-parser": "^2.0.1"
+  }
+}
