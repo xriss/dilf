@@ -13,7 +13,9 @@
     "dilf": "js/cmd.js"
   },
   "directories": {},
-  "dependencies": {},
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
   "devDependencies": {
     "json-stable-stringify": "^1.0.1",
     "sax": "^1.2.4",
