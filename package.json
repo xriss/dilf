@@ -16,7 +16,7 @@
   "dependencies": {
     "hjson": "^3.2.2",
     "json-stable-stringify": "^1.0.2",
-    "marked": "^5.0.4",
+    "marked": "^5.0.5",
     "sax": "^1.2.4",
     "yargs": "^17.7.2"
   }
