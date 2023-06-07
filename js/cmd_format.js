@@ -12,6 +12,10 @@ const pfs=require("fs/promises")
 
 const mdon=require("./mdon.js")
 const jxml=require("./jxml.js")
+const hjson=require("hjson")
+
+let stringify = require('json-stable-stringify');
+
 
 const ls=function(a) { console.log(util.inspect(a,{depth:null})); }
 
@@ -21,67 +25,103 @@ cmd_format.run=async function(argv)
 
 	let ifname=argv._[1]
 	let ofname=argv._[2]
-	let intojson=true
+	let ifmt="md"
+	let ofmt="json"
 	
-	if( ifname ) // need an input
+	if( ifname ) // input so perform conversion
 	{
-		if( ifname.endsWith(".json") )
+		if( ifname.endsWith(".json") ) { ifmt="json" }
+		if( ifname.endsWith(".xml") )  { ifmt="xml" }
+		if( ifname.endsWith(".md") )   { ifmt="md" }
+	
+		if( ofname ) // output
 		{
-			intojson=false
+			if( ofname.endsWith(".json") ) { ofmt="json" }
+			if( ofname.endsWith(".xml") )  { ofmt="xml" }
+			if( ofname.endsWith(".md") )   { ofmt="md" }
 		}
-		if( argv.markdown )
-		{
-			intojson=false
-		}
-		if( argv.json )
-		{
-			intojson=true
-		}
+
+		if( argv["json-to-xml"] ) { ifmt="json"; ofmt="xml"  }
+		if( argv["json-to-md"]  ) { ifmt="json"; ofmt="md"   }
+		if( argv["xml-to-json"] ) { ifmt="xml";  ofmt="json" }
+		if( argv["xml-to-md"]   ) { ifmt="xml";  ofmt="md"   }
+		if( argv["md-to-json"]  ) { ifmt="md";   ofmt="json" }
+		if( argv["md-to-xml"]   ) { ifmt="md";   ofmt="xml"  }
 
 		if( ! ofname ) // auto outname
 		{
-			if( intojson )
+			if( ifname.endsWith(ifmt) ) // replace
 			{
-				ofname=ifname+".json"
+				ofname=ifname.substring(0,ifname.length-ifmt.length)+ofmt
 			}
-			else
+			else // add
 			{
-				ofname=ifname+".md"
+				ofname=ifname+"."+ofmt
 			}
 		}
-		
-		if(intojson)
-		{
-			console.log(`
-Converting ${ifname} to json [${ofname}]
+
+		console.log(`
+Converting ${ifname} (${ifmt}) to ${ofname} (${ofmt})
 `)
-			await mdon.to_json(ifname,ofname)
-			return
+
+		let data={}
+		
+		if(ifmt=="json")
+		{
+			let text=await pfs.readFile(ifname,"utf8")
+			data = hjson.parse(text)
 		}
 		else
+		if(ifmt=="xml")
 		{
-			console.log(`
-Converting ${ifname} to markdown [${ofname}]
-`)
-			await mdon.to_markdown(ifname,ofname)
-			return
+			let text=await pfs.readFile(ifname,"utf8")
+			data = jxml.parse_xml(text)
 		}
+		else
+		if(ifmt=="md")
+		{
+			let text=await pfs.readFile(ifname,"utf8")
+			data = mdon.parse_md(text)
+		}
+
+		if(ofmt=="json")
+		{
+			let text=stringify(data,{space:" "})
+			await pfs.writeFile(ofname,text,"utf8")
+		}
+		else
+		if(ofmt=="xml")
+		{
+			let text=jxml.build_xml(data)
+			await pfs.writeFile(ofname,text,"utf8")
+		}
+		else
+		if(ofmt=="md")
+		{
+			let text=mdon.build_md(data)
+			await pfs.writeFile(ofname,text,"utf8")
+		}
+
+		return
 	}
 
 
-	console.log(
-`
+	console.log(`
 
->	dilf format infilename.json [outfilename.md]
->	dilf format infilename.txt --markdown [outfilename.md]
+>	dilf format infilename.[json|xml|md] outfilename.[json|xml|md]
 
-Convert json to markdown.
+We try and auto pick the input and output formats from the filenames 
+extensions but you can also force specific formats using the following 
+flags.
 
+>	dilf format --json-to-xml infilename.json [outfilename.xml]
+>	dilf format --json-to-md infilename.json [outfilename.md]
 
->	dilf format infilename.md [outfilename.json]
->	dilf format infilename.txt --json [outfilename.json]
+>	dilf format --md-to-json infilename.md [outfilename.json]
+>	dilf format --md-to-xml infilename.md [outfilename.xml]
 
-Convert markdown to json.
+>	dilf format --xml-to-json infilename.xml [outfilename.json]
+>	dilf format --xml-to-md infilename.xml [outfilename.md]
 
 `)
 

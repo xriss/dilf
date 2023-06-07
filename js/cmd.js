@@ -24,24 +24,18 @@ cmd.parse=function(argv)
 
 cmd.run=async function(argv)
 {
-	if( argv._[0]=="test" )
+	if( argv._[0]=="format" )
 	{
-		await require("./cmd_test.js").run(argv)
-		return
-	}
-	else
-	if( argv._[0]=="convert" )
-	{
-		await require("./cmd_convert.js").run(argv)
+		await require("./cmd_format.js").run(argv)
 		return
 	}
 
 	// help text
 	console.log(
 `
->	mdon convert
+>	dilf format
 
-Convert between mdon and json.
+Convert between formats.
 
 `)
 }

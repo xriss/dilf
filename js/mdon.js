@@ -6,7 +6,7 @@ See https://github.com/xriss/dilf for full notice.
 
 */
 
-const convert=exports;
+const mdon=exports;
 
 const pfs=require("fs/promises")
 const marked=require("marked")
@@ -19,20 +19,16 @@ const ls=function(a) { console.log(util.inspect(a,{depth:null})); }
 
 
 
-convert.to_markdown=async function(ifname,ofname)
+mdon.build_md=function(obj)
 {
-	let itext=await pfs.readFile(ifname,"utf8")
-	let otext=""
-	await pfs.writeFile(ofname,otext,"utf8")
+	let otext=hjson.stringify(obj)
+	return otext
 }
 
 
 
-
-convert.to_json=async function(ifname,ofname)
+mdon.parse_md=function(itext)
 {
-	let itext=await pfs.readFile(ifname,"utf8")
-
 	let otext=[]
 
 	let dump="none"
@@ -70,12 +66,10 @@ convert.to_json=async function(ifname,ofname)
 
 
 	otext=otext.join("")
-	await pfs.writeFile(ofname,otext,"utf8") // write partially complete
 
-	let obj = hjson.parse(otext)
-	otext = stringify(obj,{ space: ' ' })
+	let data = hjson.parse(otext)
 
-	await pfs.writeFile(ofname,otext,"utf8")
+	return data
 }
 
 
