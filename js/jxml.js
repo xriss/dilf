@@ -59,9 +59,8 @@ Create a json object from an xml string using the given xmap.
 The xmap is a dictionary of xpath:true for each element that may occur 
 multiple times.
 
-Not providing an xmap will make us assume that every element can occur 
-multiple times which always work but will create an ugly/inefficient 
-json format.
+Not providing an xmap will make us shrink the output to fit exactly 
+this data.
 
 */
 jxml.parse_xml=function(data,xmap)
@@ -149,6 +148,76 @@ jxml.parse_xml=function(data,xmap)
 		throw new Error("premature ending in xml data")
 	}
 
+	if(!xmap) // shrink
+	{
+		ret=jxml.shrink(ret)
+	}
+	return ret
+}
+
+// shrink a json xml object so each element is removed from an array
+// if it only contains 1 item
+// if an xmap is given then these paths will not be shrunk
+jxml.shrink=function(it,paths,xmap)
+{
+	paths=paths||[]
+	let myshrink=function(it,paths)
+	{
+		let ret=jxml.shrink_one(it,paths,xmap)
+		jxml.recurse(ret,myshrink,paths)
+		return ret
+	}
+	return myshrink(it,paths)
+}
+// perform top level expansion only, still need to recurse
+jxml.shrink_one=function(it,paths,xmap)
+{
+	paths=paths||[]
+	xmap=xmap||{}
+	let root=paths.join("")
+	let ret
+	let done=false
+	while(!done) // repeat as we shrink
+	{
+		done=true
+		ret={}
+		for(let path in it ) // make arrays
+		{
+			if( ! xmap[root+path] ) // can shrink
+			{
+				if( Array.isArray( it[path] ) )
+				{
+					if(it[path].length<=1) // singular item in array or empty array
+					{
+						done=false
+						ret[path]=it[path][0]
+					}
+					else // as is
+					{
+						ret[path]=it[path]
+					}
+				}
+				else
+				if( typeof it[path] === 'object' && it[path] !== null )
+				{
+					done=false
+					for(let n in it[path])
+					{
+						ret[path+n]=it[path][n] // join upwards
+					}
+				}
+				else
+				{
+					ret[path]=it[path] // keep as is
+				}
+			}
+			else
+			{
+				ret[path]=it[path] // keep as is
+			}
+		}
+		it=ret // swaps
+	}
 	return ret
 }
 
