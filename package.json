@@ -1,7 +1,7 @@
 {
   "name": "@xriss/dilf",
   "description": "Data I'd Like to Format",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "main": "dilf.js",
   "repository": {
