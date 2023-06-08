@@ -173,8 +173,8 @@ Converting ${ifname} (${ifmt}) to ${ofname} (${ofmt})
 	}
 
 
-	console.log(`
-
+	console.log(
+`
 >	dilf format infilename.[json|xml|md] outfilename.[json|xml|md]
 
 We try and auto pick the input and output formats from the filenames 
