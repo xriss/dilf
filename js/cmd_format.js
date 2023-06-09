@@ -182,22 +182,22 @@ extensions but you can also force specific formats using the following
 flags. Note expect lowercase and if we can not guess the format we 
 deafult to --md-to-json so will assume these formats.
 
->	dilf format --json-to-xml infilename.json [outfilename.xml]
->	dilf format --json-to-md infilename.json [outfilename.md]
+>	dilf format --json-to-xml -- infilename.json [outfilename.xml]
+>	dilf format --json-to-md -- infilename.json [outfilename.md]
 
->	dilf format --md-to-json infilename.md [outfilename.json]
->	dilf format --md-to-xml infilename.md [outfilename.xml]
+>	dilf format --md-to-json -- infilename.md [outfilename.json]
+>	dilf format --md-to-xml -- infilename.md [outfilename.xml]
 
->	dilf format --xml-to-json infilename.xml [outfilename.json]
->	dilf format --xml-to-md infilename.xml [outfilename.md]
+>	dilf format --xml-to-json -- infilename.xml [outfilename.json]
+>	dilf format --xml-to-md -- infilename.xml [outfilename.md]
 
 
->	dilf format --md-to-xml --dirs=.
+>	dilf format --md-to-xml --dirs .
 
 Convert an entire directory, recuresivly, any .md files found will be 
 converted to a .xml This depensds of course on your choice of formats.
 
->	dilf format --md-to-xml --dir=.
+>	dilf format --md-to-xml --dir .
 
 Note the use of --dir instead of --dirs , this stops recursion into sub 
 directories so only the directory explicitly given will be searched for 
