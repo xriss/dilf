@@ -21,8 +21,43 @@ const ls=function(a) { console.log(util.inspect(a,{depth:null})); }
 
 mdon.build_md=function(obj)
 {
-	let otext=hjson.stringify(obj)
-	return otext
+	let mode="json"
+	let indent=""
+	let otext=[]
+	let lines=hjson.stringify(obj).split("\n")
+	for(let line of lines)
+	{
+		let tline=line.trim()
+		if(tline=="'''") // long string
+		{
+			if(mode=="json")
+			{
+				indent=line.split("'''")[0]
+				mode="md"
+				otext.push("\n")
+			}
+			else
+			{
+				indent=line.split("'''")[0]
+				mode="json"
+				otext.push("\n")
+			}
+		}
+		else
+		{
+			if(mode=="json")
+			{
+// json data ( indent so markdown considers it a code block
+				otext.push("\t"+line+"\n")
+			}
+			else // "md"
+			{
+				otext.push(line.trim()+"\n")	// remove all indentation
+			}
+		}
+	}
+
+	return otext.join("")
 }
 
 
