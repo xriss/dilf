@@ -102,6 +102,7 @@ Converting ${ifname} (${ifmt}) to ${ofname} (${ofmt})
 			{
 				let text=await pfs.readFile(ifname,"utf8")
 				data = jxml.parse_xml(text)
+				data = jxml.numbers(data)
 			}
 			else
 			if(ifmt=="md")

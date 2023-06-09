@@ -155,6 +155,43 @@ jxml.parse_xml=function(data,xmap)
 	return ret
 }
 
+// automatically convert numbers in strings to a number
+// if converting them back to a string would be lossless
+jxml.numbers=function(it,paths)
+{
+	let ret=jxml.numbers_one(it)
+	jxml.recurse(ret,jxml.numbers,paths)
+	return ret
+}
+// perform top level expansion only, still need to recurse
+jxml.numbers_one=function(it)
+{
+	let ret={}
+	for(let path in it ) // make arrays
+	{
+		let v=it[path]
+		if( typeof v == "string" )
+		{
+			let n=Number.parseFloat(v)
+			let s=""+n
+			if(v==s) // can be converted to a number in a lossless way
+			{
+				ret[path]=n
+			}
+			else // keep as string
+			{
+				ret[path]=v
+			}
+		}
+		else
+		{
+			ret[path]=v
+		}
+	}
+	return ret
+}
+
+
 // shrink a json xml object so each element is removed from an array
 // if it only contains 1 item
 // if an xmap is given then these paths will not be shrunk
